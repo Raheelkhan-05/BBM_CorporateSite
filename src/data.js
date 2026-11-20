@@ -66,7 +66,8 @@ export const facts = [
     { tag: "Both", tone: "teal", num: "6", label: "Product categories", note: "Automotive and engineering, packaging, food, chemicals, FMCG and industrial supplies." },
     { tag: "Export", tone: "accent", num: "21", label: "Countries we have shipped to", note: "Exporting to customers across 21 countries." },
     { tag: "Export", tone: "accent", num: "198", label: "Verified manufacturers in our network", note: "A network of 198 verified manufacturing partners." },
-    { tag: "Marketplace", tone: "teal", num: "15,000+", label: "Products listed", note: "Over 15,000 products listed on bbm.business." },
+    // { tag: "Marketplace", tone: "teal", num: "15,000+", label: "Products listed", note: "Over 15,000 products listed on bbm.business." },
+    { tag: "Marketplace", tone: "teal", num: "15,000+", live: "products", label: "Products listed", note: "Live count of products listed on bbm.business." },
 ];
 
 export const principles = [
