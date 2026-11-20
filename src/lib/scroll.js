@@ -10,7 +10,7 @@ export function scrollToHash(hash) {
     if (!el) return false;
 
     const header = document.querySelector(".header");
-    const offset = -(header ? header.offsetHeight : 72);
+    const offset = -(header ? header.offsetHeight : 72) + 100;
     const lenis = window.__lenis;
 
     if (lenis) {
