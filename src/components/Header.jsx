@@ -26,27 +26,48 @@ export function TopBar() {
 export function Header() {
     const [open, setOpen] = useState(false);
 
+    // Lock / unlock page scroll while the menu is open.
     useEffect(() => {
-        const l = window.__lenis;
-        if (open) l?.stop();
-        else l?.start();
-        document.body.style.overflow = open ? "hidden" : "";
-        return () => {
-            l?.start();
-            document.body.style.overflow = "";
-        };
+        const html = document.documentElement;
+        const lenis = window.__lenis;
+        if (open) {
+            lenis?.stop();
+            html.classList.add("menu-open");
+        } else {
+            // start() cancels running scroll animations, so only call it if Lenis is really stopped.
+            if (lenis?.isStopped) lenis.start();
+            html.classList.remove("menu-open");
+        }
     }, [open]);
 
+    // Safety net: never leave the page locked if the header unmounts.
+    useEffect(
+        () => () => {
+            const lenis = window.__lenis;
+            if (lenis?.isStopped) lenis.start();
+            document.documentElement.classList.remove("menu-open");
+        },
+        []
+    );
+
+    // Close on Escape and when the screen becomes wide enough for the desktop nav.
     useEffect(() => {
+        const onKey = (e) => e.key === "Escape" && setOpen(false);
         const onResize = () => window.innerWidth > 1040 && setOpen(false);
+        window.addEventListener("keydown", onKey);
         window.addEventListener("resize", onResize);
-        return () => window.removeEventListener("resize", onResize);
+        return () => {
+            window.removeEventListener("keydown", onKey);
+            window.removeEventListener("resize", onResize);
+        };
     }, []);
+
+    const close = () => setOpen(false);
 
     return (
         <header className="header">
             <div className="wrap header-in">
-                <a href="#top" className="brand" onClick={() => setOpen(false)}>
+                <a href="#top" className="brand" onClick={close}>
                     <img src="/assets/logo.png" alt="Brand Brigade Marketing logo" />
                     <span className="brand-text">
                         <span className="hd brand-name">Brand Brigade</span>
@@ -65,7 +86,14 @@ export function Header() {
                     <a className="btn btn-accent btn-sm hide-sm" href="#enquiry">
                         Send an enquiry <Arrow size={16} />
                     </a>
-                    <button className="burger" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+                    <button
+                        type="button"
+                        className="burger"
+                        aria-label={open ? "Close menu" : "Open menu"}
+                        aria-expanded={open}
+                        aria-controls="mobile-menu"
+                        onClick={() => setOpen((o) => !o)}
+                    >
                         <span className={"burger-i" + (open ? " is-open" : "")}><i /><i /><i /></span>
                     </button>
                 </div>
@@ -74,7 +102,22 @@ export function Header() {
             <AnimatePresence>
                 {open && (
                     <motion.div
+                        key="backdrop"
+                        className="menu-backdrop"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        onClick={close}
+                        aria-hidden="true"
+                    />
+                )}
+                {open && (
+                    <motion.div
+                        key="menu"
+                        id="mobile-menu"
                         className="mobile-menu"
+                        data-lenis-prevent
                         initial={{ opacity: 0, y: -12 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -12 }}
@@ -85,7 +128,7 @@ export function Header() {
                                 <motion.a
                                     key={href}
                                     href={href}
-                                    onClick={() => setOpen(false)}
+                                    onClick={close}
                                     initial={{ opacity: 0, x: -14 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: 0.05 + i * 0.04 }}
@@ -96,10 +139,10 @@ export function Header() {
                             ))}
                         </nav>
                         <div className="mm-cta">
-                            <a className="btn btn-accent" href="#enquiry" onClick={() => setOpen(false)}>
+                            <a className="btn btn-accent" href="#enquiry" onClick={close}>
                                 Send an enquiry <Arrow />
                             </a>
-                            <a className="btn btn-outline" href="https://www.bbm.business" target="_blank" rel="noopener">Visit Marketplace</a>
+                            <a className="btn btn-outline" href="https://www.bbm.business" target="_blank" rel="noopener" onClick={close}>Visit Marketplace</a>
                         </div>
                     </motion.div>
                 )}

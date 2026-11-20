@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-
-const HEADER_OFFSET = -72;
+import { scrollToHash } from "../lib/scroll";
 
 export function useLenis() {
     useEffect(() => {
@@ -23,20 +22,19 @@ export function useLenis() {
                     raf = requestAnimationFrame(loop);
                 };
                 raf = requestAnimationFrame(loop);
+
+                // opened with a #section in the URL
+                if (window.location.hash) requestAnimationFrame(() => scrollToHash(window.location.hash));
             });
         }
 
-        // Smooth anchor links (#export, #enquiry, ...)
+        // One handler for every in-page link (#export, #enquiry, ...)
         const onClick = (e) => {
+            if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            if (!(e.target instanceof Element)) return;
             const a = e.target.closest('a[href^="#"]');
             if (!a) return;
-            const hash = a.getAttribute("href");
-            const el = hash.length > 1 ? document.querySelector(hash) : null;
-            if (!el) return;
-            e.preventDefault();
-            if (lenis) lenis.scrollTo(el, { offset: HEADER_OFFSET, force: true });
-            else el.scrollIntoView({ behavior: "auto" });
-            history.replaceState(null, "", hash);
+            if (scrollToHash(a.getAttribute("href"))) e.preventDefault();
         };
         document.addEventListener("click", onClick);
 
