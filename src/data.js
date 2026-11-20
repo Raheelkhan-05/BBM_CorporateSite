@@ -64,9 +64,9 @@ export const facts = [
     { tag: "Company", tone: "accent", num: "2017", label: "Year of incorporation", note: "Registered as a private limited company in Gujarat, India." },
     { tag: "Company", tone: "accent", num: "2", label: "Connected businesses", note: "BBM Export and BBM Marketplace, run by one team." },
     { tag: "Both", tone: "teal", num: "6", label: "Product categories", note: "Automotive and engineering, packaging, food, chemicals, FMCG and industrial supplies." },
-    { tag: "Export", tone: "accent", num: "[00]+", label: "Countries we have shipped to", note: "Replace with your number of export destinations." },
-    { tag: "Export", tone: "accent", num: "[00]+", label: "Verified manufacturers in our network", note: "Replace with your number of active supplier partners." },
-    { tag: "Marketplace", tone: "teal", num: "[000]+", label: "Products listed", note: "Replace with your live listing count on bbm.business." },
+    { tag: "Export", tone: "accent", num: "21", label: "Countries we have shipped to", note: "Exporting to customers across 21 countries." },
+    { tag: "Export", tone: "accent", num: "198", label: "Verified manufacturers in our network", note: "A network of 198 verified manufacturing partners." },
+    { tag: "Marketplace", tone: "teal", num: "15,000+", label: "Products listed", note: "Over 15,000 products listed on bbm.business." },
 ];
 
 export const principles = [

@@ -26,7 +26,7 @@ export default function App() {
         <Facts />
         <About />
         <Verify />
-        <Leadership />
+        {/* <Leadership /> */}
         <Bridge />
         <Enquiry />
         <Faq />
