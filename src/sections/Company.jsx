@@ -1,7 +1,10 @@
 import { Arrow, Check, Eyebrow, ExtArrow, Icon, Reveal } from "../components/common";
 import { facts, glance, principles, handle, creds, people } from "../data";
+import CountUp from "../components/CountUp";
+import { useLiveStats } from "../hooks/useLiveStats";
 
 export function Facts() {
+    const stats = useLiveStats();
     return (
         <section id="facts" className="sec bg-soft">
             <div className="wrap">
@@ -11,14 +14,23 @@ export function Facts() {
                     <p className="lead">What we are, how long we have been at it, and the scale of both businesses.</p>
                 </Reveal>
                 <div className="grid g-300">
-                    {facts.map((f, i) => (
-                        <Reveal key={f.label} className={"fact fact-" + f.tone} delay={(i % 3) * 0.08}>
-                            <div className="fact-tag">{f.tag}</div>
-                            <div className="hd fact-num">{f.num}</div>
-                            <div className="fact-label">{f.label}</div>
-                            <div className="fact-note">{f.note}</div>
-                        </Reveal>
-                    ))}
+                    {facts.map((f, i) => {
+                        const liveVal = f.live ? stats?.[f.live] : null;
+                        const isLive = Number.isFinite(Number(liveVal)) && Number(liveVal) > 0;
+                        return (
+                            <Reveal key={f.label} className={"fact fact-" + f.tone} delay={(i % 3) * 0.08}>
+                                <div className="fact-tag">
+                                    {f.tag}
+                                    {isLive && <span className="live-dot" title="Updates automatically">Live</span>}
+                                </div>
+                                <div className="hd fact-num">
+                                    {isLive ? <CountUp value={Number(liveVal)} /> : f.num}
+                                </div>
+                                <div className="fact-label">{f.label}</div>
+                                <div className="fact-note">{f.note}</div>
+                            </Reveal>
+                        );
+                    })}
                 </div>
             </div>
         </section>
