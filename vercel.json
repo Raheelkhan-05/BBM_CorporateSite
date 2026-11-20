@@ -1,0 +1,15 @@
+{
+    "redirects": [
+        {
+            "source": "/(.*)",
+            "has": [
+                {
+                    "type": "host",
+                    "value": "bbmpvtltd.com"
+                }
+            ],
+            "destination": "https://www.bbmpvtltd.com/$1",
+            "permanent": true
+        }
+    ]
+}
